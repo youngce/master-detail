@@ -4,34 +4,14 @@ using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Threading;
-//using Grandsys.Wfm.Services.Outsource.ServiceModel;
 using ServiceStack.ServiceClient.Web;
 using ServiceStack.ServiceHost;
 using Telerik.Windows.Controls;
 using System.Linq;
+using WpfApplication4.Model;
 
 namespace WpfApplication4.ViewModels
 {
-    public class ResponseEvaluationItem
-    {
-        public string Id { get; set; }
-        public string Name { get; set; }
-        public string Status { get; set; }
-        public string StatisticalWay { get; set; }
-        public IEnumerable<Grandsys.Wfm.Services.Outsource.ServiceModel.Link> Links { get; set; }
-        public IEnumerable<Grandsys.Wfm.Services.Outsource.ServiceModel.Link> SetFormulaOptions { get; set; }
-        //public IEnumerable<Link> Links { get; set; }
-        //public IEnumerable<Link> SetFormulaOptions { get; set; }
-    }
-
-
-    //public class Link
-    //{
-    //    public string Name { get; set; }
-    //    public string Method { get; set; }
-    //    public IReturn<ResponseEvaluationItem> Request { get; set; }
-    //}
-
     public partial class MasterViewModel
     {
         class EvaluationItemTitle
@@ -100,11 +80,10 @@ namespace WpfApplication4.ViewModels
 
         public ObservableCollection<object> Items { get; private set; }
 
-        private void TurnToReadOnlyMode(object _)
+        private void SetActiveViewModel(object _)
         {
             if (_selectedItem == null)
             {
-                //ActivedItem = new UndefinedViewModel();
                 return;
             }
 
@@ -166,11 +145,11 @@ namespace WpfApplication4.ViewModels
                     }
                     if (verb == "DELETE")
                         Items.Remove(SelectedItem);
-                    if (verb == "PUT")
-                    {
-                        Items.Insert(0, new EvaluationItemTitle() { Name = rt.Name, Id = rt.Id });
-                        SelectedItem = Items[0];
-                    }
+                    //if (verb == "PUT")
+                    //{
+                    //    Items.Insert(0, new EvaluationItemTitle() { Name = rt.Name, Id = rt.Id });
+                    //    SelectedItem = Items[0];
+                    //}
 
                 }) { Content = link.Name });
             }
@@ -185,7 +164,7 @@ namespace WpfApplication4.ViewModels
                 if (_activedItem == null || !_activedItem.IsEditing)
                 {
                     _selectedItem = value;
-                    TurnToReadOnlyMode(null);
+                    SetActiveViewModel(null);
                 }
 
                 Application.Current.Dispatcher.BeginInvoke(new Action(() => { OnPropertyChanged(() => SelectedItem); }), DispatcherPriority.ContextIdle);
@@ -205,3 +184,4 @@ namespace WpfApplication4.ViewModels
         }
     }
 }
+

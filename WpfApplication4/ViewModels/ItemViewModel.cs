@@ -1,6 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using Telerik.Windows.Controls;
 using System.Linq;
+using WpfApplication4.Model;
 
 namespace WpfApplication4.ViewModels
 {
