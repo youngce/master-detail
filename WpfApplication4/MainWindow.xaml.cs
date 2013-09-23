@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ServiceStack.ServiceHost;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -16,18 +17,6 @@ using WpfApplication4.ViewModels;
 
 namespace WpfApplication4
 {
-    public class HyperCommand
-    {
-        public HyperCommand(Action<object> execute)
-        {
-            Command = new DelegateCommand(execute);
-        }
-
-        public string Content { get; set; }
-
-        public ICommand Command { get; private set; }
-    }
-
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>

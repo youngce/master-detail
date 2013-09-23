@@ -2,6 +2,8 @@
 using Telerik.Windows.Controls;
 using System.Linq;
 using WpfApplication4.Model;
+using System.Collections.Generic;
+using System;
 
 namespace WpfApplication4.ViewModels
 {
@@ -10,13 +12,15 @@ namespace WpfApplication4.ViewModels
         public static ItemViewModel Create(ResponseEvaluationItem model)
         {
             if (model == null)
+                return new UndefinedViewModel();
+            if (string.IsNullOrEmpty(model.Id))
                 return new NewItemViewModel() { Name = "unnamed"};
             if (model.Status == "deleted")
             {
                 return new DeletedViewModel() { Id = model.Id ,Name = model.Name, StatisticalWay = model.StatisticalWay};
             }
 
-            if (model.Links.Any(o=> o.Method == "PUT"))
+            if (model.Links != null && model.Links.Any(o=> o.Method == "PUT"))
             {
                 return new ItemEditViewModel()
                 {
