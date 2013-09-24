@@ -3,6 +3,17 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-         
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+
+                <!-- Telerik.Windows.Controls is used by all assemblies -->
+                <ResourceDictionary Source="Themes/Windows8/Telerik.Windows.Controls.xaml" />
+
+                <ResourceDictionary Source="Themes/Windows8/System.Windows.xaml" />
+                <ResourceDictionary Source="Themes/Windows8/Telerik.Windows.Controls.Input.xaml" />
+
+               
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
     </Application.Resources>
 </Application>

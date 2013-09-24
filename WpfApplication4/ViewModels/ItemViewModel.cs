@@ -14,28 +14,31 @@ namespace WpfApplication4.ViewModels
             if (model == null)
                 return new UndefinedViewModel();
             if (string.IsNullOrEmpty(model.Id))
-                return new NewItemViewModel() { Name = "unnamed"};
+                return new NewItemViewModel() { Name = "unnamed" };
             if (model.Status == "deleted")
             {
-                return new DeletedViewModel() { Id = model.Id ,Name = model.Name, StatisticalWay = model.StatisticalWay};
+                return new DeletedViewModel() { Id = model.Id, Name = model.Name, StatisticalWay = model.StatisticalWay };
             }
 
-            if (model.Links != null && model.Links.Any(o=> o.Method == "PUT"))
+            if (model.Links != null && model.Links.Any(o => o.Method == "PUT"))
             {
-                return new ItemEditViewModel()
+                var vm = new ItemEditViewModel()
                 {
                     Id = model.Id,
                     Name = model.Name,
+                    Formula = model.Formula,
                     StatisticalWay = model.StatisticalWay,
                     SetFormulaOptions = model.SetFormulaOptions
                 };
+                return vm;
             }
-          
+
             return new ItemViewModel()
             {
                 Id = model.Id,
                 Name = model.Name,
-                StatisticalWay = model.StatisticalWay
+                StatisticalWay = model.StatisticalWay,
+                Formula = model.Formula
             };
         }
 
@@ -44,6 +47,7 @@ namespace WpfApplication4.ViewModels
         public string Name { get; set; }
 
         public string StatisticalWay { get; set; }
+        public string Formula { get; set; }
 
         public ItemViewModel()
         {
@@ -62,6 +66,11 @@ namespace WpfApplication4.ViewModels
             {
                 _isEditing = value; OnPropertyChanged(() => IsEditing);
             }
+        }
+
+        public virtual void OperationAdded()
+        {
+           
         }
 
         public ObservableCollection<HyperCommand> Operations { get; set; }

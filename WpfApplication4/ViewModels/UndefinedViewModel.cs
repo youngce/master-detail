@@ -7,7 +7,10 @@
 
     public class NewItemViewModel : ItemViewModel
     {
-        
+        public NewItemViewModel()
+        {
+            IsEditing = true;
+        }
     }
 
     public class DeletedViewModel : ItemViewModel

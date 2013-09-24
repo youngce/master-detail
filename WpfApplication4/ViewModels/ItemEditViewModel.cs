@@ -12,30 +12,33 @@ namespace WpfApplication4.ViewModels
         public ItemEditViewModel()
         {
             IsEditing = true;
-
-            //if(model.Links!=null)
-            //    foreach (var link in model.Links)
-            //        Operations.Add(new HyperCommand(_ =>
-            //            {
-
-
-            //            }) { Content = link.Name });
-
-            // Content = model.Name;
         }
 
         private Link _selectedFormula;
         public Link SelectedFormula
         {
-            get { return _selectedFormula; }
+            get
+            {   
+                return _selectedFormula;
+            }
             set
             {
                 _selectedFormula = value;
-                var putOperation =  Operations.FirstOrDefault(o => o.Method == "PUT");
+                var putOperation = Operations.FirstOrDefault(o => o.Method == "PUT");
                 if (putOperation != null)
                 {
                     putOperation.Request = _selectedFormula.Request;
+                    putOperation.Method = _selectedFormula.Method;
                 }
+                OnPropertyChanged(() => SelectedFormula);
+            }
+        }
+
+        public override void OperationAdded()
+        {
+            if (!string.IsNullOrEmpty(Formula))
+            {
+                SelectedFormula = SetFormulaOptions.FirstOrDefault(o => Formula.ToLower().Contains(o.Name.ToLower()));
             }
         }
     }

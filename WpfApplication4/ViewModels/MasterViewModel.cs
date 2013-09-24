@@ -36,43 +36,15 @@ namespace WpfApplication4.ViewModels
             var source = new BehaviorSubject<ItemViewModel>(new UndefinedViewModel());
             source.ToProperty(this, x => x.CurrentViewModel);
 
-            _client = new JsonServiceClient("http://localhost:29315");
+            _client = new JsonServiceClient("http://localhost:35138");
             GetAll = new ReactiveAsyncCommand();
             New = new ReactiveAsyncCommand();
-
-            IObserver<ResponseEvaluationItem> obsvr = null;
-
-            obsvr = Observer.Create<ResponseEvaluationItem>(o =>
-            {
-                var vm = ItemViewModel.Create(o);
-
-                if (o != null && o.Links != null)
-                {
-                    foreach (var link in o.Links)
-                    {
-                        var cmd = new HyperCommand(_client, link);
-                        if (link.Method != "GET")
-                        {
-                            cmd.Response.Throttle(TimeSpan.FromMilliseconds(500)).Subscribe(_ =>
-                              {
-                                  GetAll.Execute(null);
-                              });
-                        }
-                        cmd.Response.Subscribe(obsvr);
-                        vm.Operations.Add(cmd);
-                    }
-                }
-                source.OnNext(vm);
-            });
-
 
             var selectedItemChanged = this.WhenAny(x => x.SelectedItem, x => x.Value);
 
             var getEvaluationItem = selectedItemChanged.ObserveOn(Scheduler.Default)
                                         .Where(x => x != null && x.Id != CurrentViewModel.Id)
                                         .Select(o => _client.Get(new GetEvaluationItem(o.Id)));
-
-            getEvaluationItem.Subscribe(obsvr);
 
             var howToNew = New.RegisterAsyncFunction(_ =>
             {
@@ -83,8 +55,6 @@ namespace WpfApplication4.ViewModels
                 return new ResponseEvaluationItem() { Links = links };
             });
 
-            howToNew.Subscribe(obsvr);
-
             GetAll.RegisterAsyncFunction(_ =>
             {
                 return _client.Get(new EvaluationItems()).ToObservable().CreateCollection();
@@ -94,6 +64,39 @@ namespace WpfApplication4.ViewModels
             {
                 SelectedItem = o.FirstOrDefault(a => Equals(a.Id, CurrentViewModel.Id));
             });
+
+            IObserver<ResponseEvaluationItem> obsvr = null;
+
+            obsvr = Observer.Create<ResponseEvaluationItem>(o =>
+            {
+                if (o == null)
+                {
+                    source.OnNext(new UndefinedViewModel());
+                    return;
+                }
+
+                var vm = ItemViewModel.Create(o);
+
+                foreach (var link in o.Links)
+                {
+                    var cmd = new HyperCommand(_client, link);
+                    if (link.Method != "GET")
+                    {
+                        cmd.Response.Throttle(TimeSpan.FromMilliseconds(500)).Subscribe(_ =>
+                        {
+                            GetAll.Execute(null);
+                        });
+                    }
+                    cmd.Response.Subscribe(obsvr);
+                    vm.Operations.Add(cmd);
+                }
+
+                vm.OperationAdded();
+                source.OnNext(vm);
+            });
+
+            howToNew.Subscribe(obsvr);
+            getEvaluationItem.Subscribe(obsvr);
         }
 
         public ReactiveAsyncCommand GetAll { get; set; }

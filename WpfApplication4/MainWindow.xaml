@@ -2,6 +2,8 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:wpfApplication4="clr-namespace:WpfApplication4"
         xmlns:viewModels="clr-namespace:WpfApplication4.ViewModels"
+        xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation"
+        xmlns:servicemodel="clr-namespace:Grandsys.Wfm.Services.Outsource.ServiceModel;assembly=Grandsys.Wfm.Services.Outsource.ServiceModel"
         Title="MainWindow" Height="350" Width="525">
     <Grid>
         <Grid.ColumnDefinitions>
@@ -13,11 +15,11 @@
                 <Button Content="Refresh" Command="{Binding GetAll}"/>
                 <Button Content="New" Command="{Binding New}"/>
             </StackPanel>
-            
+
             <ListBox x:Name="ItemsListBox" ItemsSource="{Binding Items}" Margin="10" 
-                 SelectedValue="{Binding SelectedItem}"
-                 DisplayMemberPath="Name"/>
-            
+                     SelectedValue="{Binding SelectedItem}"
+                     DisplayMemberPath="Name"/>
+
         </DockPanel>
         <ContentControl Grid.Column="1" Margin="10" Content="{Binding CurrentViewModel}">
             <ContentControl.Resources>
@@ -41,7 +43,7 @@
                             </ItemsControl.ItemTemplate>
                         </ItemsControl>
                         <StackPanel>
-                            <TextBox Text="{Binding Name}"/>
+                            <telerik:RadWatermarkTextBox WatermarkContent="Name" Text="{Binding Name}" HorizontalAlignment="Stretch"/>
                         </StackPanel>
                     </DockPanel>
                 </DataTemplate>
@@ -64,6 +66,7 @@
                         <StackPanel>
                             <TextBlock Text="{Binding Name}"/>
                             <TextBlock Text="{Binding StatisticalWay}" Margin="0 10"/>
+                            <TextBlock Text="{Binding Formula}" Margin="0 0 0 10" TextWrapping="Wrap"/>
                         </StackPanel>
 
                     </DockPanel>
@@ -85,9 +88,22 @@
                             </ItemsControl.ItemTemplate>
                         </ItemsControl>
                         <StackPanel>
-                            <TextBox Text="{Binding Name}"/>
+                            <telerik:RadWatermarkTextBox WatermarkContent="Name" Text="{Binding Name}"/>
                             <TextBlock Text="{Binding StatisticalWay}" Margin="0 10"/>
                             <ComboBox ItemsSource="{Binding SetFormulaOptions}" SelectedItem="{Binding SelectedFormula}"  DisplayMemberPath="Name"/>
+                            <ContentControl Content="{Binding SelectedFormula.Request}">
+                                <ContentControl.Resources>
+                                    <DataTemplate DataType="{x:Type servicemodel:LinearFormula}">
+                                        <StackPanel>
+                                            <telerik:RadNumericUpDown Value="{Binding BaseIndicator}"/>
+                                            <telerik:RadNumericUpDown Value="{Binding BaseScore}"/>
+                                            <telerik:RadNumericUpDown Value="{Binding Scale}"/>
+                                            <telerik:RadNumericUpDown Value="{Binding IncreaseStepScore}"/>
+                                            <telerik:RadNumericUpDown Value="{Binding DecreaseStepScore}"/>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ContentControl.Resources>
+                            </ContentControl>
                         </StackPanel>
 
                     </DockPanel>
