@@ -11,7 +11,6 @@ namespace WpfApplication4
 {
     public class HyperCommand
     {
-        
         public HyperCommand(JsonServiceClient client ,Grandsys.Wfm.Services.Outsource.ServiceModel.Link link)
         {
             Content = link.Name;
@@ -42,12 +41,15 @@ namespace WpfApplication4
                         response = client.Send<Model.ResponseEvaluationItem>(Method, Request.ToUrl(Method), Request);
                         break;
                     case "GET":
-                        response = client.Send<Model.ResponseEvaluationItem>(Method, Request.ToUrl(Method), null);
+                        //response = client.Send<Model.ResponseEvaluationItem>(Method, Request.ToUrl(Method), null);
+                        response = client.Get<Model.ResponseEvaluationItem>(Request.ToUrl(Method));
                         break;
                 }
                 return response;
             });
-
+            Command.ThrownExceptions.Subscribe(ex => {
+                Console.WriteLine(ex.Message);
+            });
         }
 
         public IObservable<Model.ResponseEvaluationItem> Response { get; private set; }

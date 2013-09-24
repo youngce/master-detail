@@ -102,6 +102,16 @@
                                             <telerik:RadNumericUpDown Value="{Binding DecreaseStepScore}"/>
                                         </StackPanel>
                                     </DataTemplate>
+                                    <DataTemplate DataType="{x:Type servicemodel:SlideFormula}">
+                                        <StackPanel>
+                                            <telerik:RadNumericUpDown Value="{Binding BaseIndicator}"/>
+                                            <telerik:RadNumericUpDown Value="{Binding BaseScore}"/>
+                                            <telerik:RadNumericUpDown Value="{Binding Scale}"/>
+                                            <telerik:RadNumericUpDown Value="{Binding StepScore}"/>
+                                            <telerik:RadNumericUpDown Value="{Binding StartIndicator}"/>
+                                            <telerik:RadNumericUpDown Value="{Binding FinalIndicator}"/>
+                                        </StackPanel>
+                                    </DataTemplate>
                                 </ContentControl.Resources>
                             </ContentControl>
                         </StackPanel>
