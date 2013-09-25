@@ -36,7 +36,7 @@ namespace WpfApplication4.ViewModels
             var source = new BehaviorSubject<ItemViewModel>(new UndefinedViewModel());
             source.ToProperty(this, x => x.CurrentViewModel);
 
-            _client = new JsonServiceClient("http://192.168.40.38:1678");
+            _client = new JsonServiceClient("http://localhost:35138/");
             GetAll = new ReactiveAsyncCommand();
             New = new ReactiveAsyncCommand();
 
