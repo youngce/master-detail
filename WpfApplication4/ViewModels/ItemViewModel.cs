@@ -20,16 +20,10 @@ namespace WpfApplication4.ViewModels
                 return new DeletedViewModel() { Id = model.Id, Name = model.Name, StatisticalWay = model.StatisticalWay };
             }
 
-            if (model.Links != null && model.Links.Any(o => o.Method == "PUT"))
+            if (model.Links != null && model.Links.Any(o => o.Method == "PATCH"))
             {
-                var vm = new ItemEditViewModel()
-                {
-                    Id = model.Id,
-                    Name = model.Name,
-                    Formula = model.Formula,
-                    StatisticalWay = model.StatisticalWay,
-                    SetFormulaOptions = model.SetFormulaOptions
-                };
+                var vm = new ItemEditViewModel(model);
+                
                 return vm;
             }
 
@@ -44,7 +38,7 @@ namespace WpfApplication4.ViewModels
 
         public string Id { get; set; }
 
-        public string Name { get; set; }
+        public virtual string Name { get; set; }
 
         public string StatisticalWay { get; set; }
         public string Formula { get; set; }

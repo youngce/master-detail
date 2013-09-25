@@ -91,10 +91,10 @@
                             <telerik:RadWatermarkTextBox WatermarkContent="Name" Text="{Binding Name}"/>
                             <TextBlock Text="{Binding StatisticalWay}" Margin="0 10"/>
                             <ComboBox ItemsSource="{Binding SetFormulaOptions}" SelectedItem="{Binding SelectedFormula}"  DisplayMemberPath="Name"/>
-                            <ContentControl Content="{Binding SelectedFormula.Request}">
+                            <ContentControl Content="{Binding SelectedFormula}">
                                 <ContentControl.Resources>
-                                    <DataTemplate DataType="{x:Type servicemodel:LinearFormula}">
-                                        <StackPanel>
+                                    <DataTemplate DataType="{x:Type viewModels:LinearFormulaViewModel}">
+                                        <StackPanel >
                                             <telerik:RadNumericUpDown Value="{Binding BaseIndicator}"/>
                                             <telerik:RadNumericUpDown Value="{Binding BaseScore}"/>
                                             <telerik:RadNumericUpDown Value="{Binding Scale}"/>
@@ -102,7 +102,7 @@
                                             <telerik:RadNumericUpDown Value="{Binding DecreaseStepScore}"/>
                                         </StackPanel>
                                     </DataTemplate>
-                                    <DataTemplate DataType="{x:Type servicemodel:SlideFormula}">
+                                    <DataTemplate DataType="{x:Type viewModels:SlideFormulaViewModel}">
                                         <StackPanel>
                                             <telerik:RadNumericUpDown Value="{Binding BaseIndicator}"/>
                                             <telerik:RadNumericUpDown Value="{Binding BaseScore}"/>

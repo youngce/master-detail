@@ -26,18 +26,6 @@ namespace WpfApplication4
                 switch (Method)
                 {
                     default:
-                        var current = _;
-                        var sourceProps = current.GetType().GetProperties().ToDictionary(o => o.Name, o => o);
-                        var props = Request.GetType().GetProperties();
-                        foreach (var prop in props)
-                        {
-                            System.Reflection.PropertyInfo sourceProp;
-                            if (sourceProps.TryGetValue(prop.Name, out sourceProp))
-                            {
-                                var value = sourceProp.GetValue(current, null);
-                                prop.SetValue(Request, value, null);
-                            }
-                        }
                         response = client.Send<Model.ResponseEvaluationItem>(Method, Request.ToUrl(Method), Request);
                         break;
                     case "GET":
