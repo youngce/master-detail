@@ -41,7 +41,6 @@ namespace WpfApplication4
                         response = client.Send<Model.ResponseEvaluationItem>(Method, Request.ToUrl(Method), Request);
                         break;
                     case "GET":
-                        //response = client.Send<Model.ResponseEvaluationItem>(Method, Request.ToUrl(Method), null);
                         response = client.Get<Model.ResponseEvaluationItem>(Request.ToUrl(Method));
                         break;
                 }
