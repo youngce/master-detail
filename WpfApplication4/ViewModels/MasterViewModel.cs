@@ -27,7 +27,7 @@ namespace WpfApplication4.ViewModels
     {
 
         private JsonServiceClient _client;
-        private ReactiveUI.ObservableAsPropertyHelper<ItemViewModel> _CurrentViewModel;
+        private ObservableAsPropertyHelper<ItemViewModel> _CurrentViewModel;
 
         public ItemViewModel CurrentViewModel { get { return _CurrentViewModel.Value; } }
 
@@ -49,9 +49,11 @@ namespace WpfApplication4.ViewModels
             var howToNew = New.RegisterAsyncFunction(_ =>
             {
                 var response = _client.Get(new Grandsys.Wfm.Services.Outsource.ServiceModel.EvaluationItemsCreationWays());
-                var links = new List<Grandsys.Wfm.Services.Outsource.ServiceModel.Link>(response.Links);
+                var links = new List<Grandsys.Wfm.Services.Outsource.ServiceModel.Link>(response.Links)
+                {
+                    new Grandsys.Wfm.Services.Outsource.ServiceModel.Link() {Name = "Discard"}
+                };
 
-                links.Add(new Grandsys.Wfm.Services.Outsource.ServiceModel.Link() { Name = "Discard" });
                 return new ResponseEvaluationItem() { Links = links };
             });
 

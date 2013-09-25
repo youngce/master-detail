@@ -27,8 +27,9 @@ namespace WpfApplication4.ViewModels
                     vm = new LinearFormulaViewModel(o.Request) { TryGetRequest = GetRequest  };
                 else if (o.Name == "Slide")
                     vm = new SlideFormulaViewModel(o.Request) { TryGetRequest = GetRequest };
-                else 
+                else
                     vm = new UnsupportFormulaViewModel();
+                vm.Name = o.Name;
                 return vm;
             }).ToList();
 

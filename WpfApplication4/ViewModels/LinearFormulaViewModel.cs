@@ -4,8 +4,8 @@ namespace WpfApplication4.ViewModels
 {
     public class LinearFormulaViewModel : FormulaViewModel
     {
-        private double _increaseStepScore;
         private double _decreaseStepScore;
+        private double _increaseStepScore;
 
         public LinearFormulaViewModel(object model)
             : base(model)
@@ -14,33 +14,31 @@ namespace WpfApplication4.ViewModels
 
         public double IncreaseStepScore
         {
-            get { return this._increaseStepScore; }
+            get { return _increaseStepScore; }
             set
             {
-                this._increaseStepScore = value;
+                _increaseStepScore = value;
                 WriteToRequestFormula();
             }
         }
 
         public double DecreaseStepScore
         {
-            get { return this._decreaseStepScore; }
+            get { return _decreaseStepScore; }
             set
             {
-                this._decreaseStepScore = value;
+                _decreaseStepScore = value;
                 WriteToRequestFormula();
             }
         }
 
-        public override string Name { get { return "Linear"; } }
-
         public override void WriteToRequestFormula()
         {
             if (TryGetRequest == null) return;
-            var request = TryGetRequest();
+            UpdateEvaluationItem request = TryGetRequest();
             if (request != null)
             {
-                request.Formula = new FormulaInfo()
+                request.Formula = new FormulaInfo
                 {
                     Type = Name,
                     BaseIndicator = BaseIndicator,

@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using System.Reflection;
 using Grandsys.Wfm.Services.Outsource.ServiceModel;
 
 namespace WpfApplication4.ViewModels
@@ -9,6 +10,11 @@ namespace WpfApplication4.ViewModels
         private double _baseIndicator;
         private double _baseScore;
         private double _scale;
+
+        protected FormulaViewModel(object model)
+        {
+            ToProperties(model, this);
+        }
 
         public double BaseIndicator
         {
@@ -22,40 +28,39 @@ namespace WpfApplication4.ViewModels
 
         public double BaseScore
         {
-            get { return this._baseScore; }
+            get { return _baseScore; }
             set
             {
-                this._baseScore = value;
+                _baseScore = value;
                 WriteToRequestFormula();
             }
         }
 
         public double Scale
         {
-            get { return this._scale; }
+            get { return _scale; }
             set
             {
-                this._scale = value;
+                _scale = value;
                 WriteToRequestFormula();
             }
         }
 
-        public FormulaViewModel(object model)
-        {
-            ToProperties(model, this);
-        }
+        public string Name { get; set; }
 
-        public abstract string Name { get; }
+        public Func<UpdateEvaluationItem> TryGetRequest { get; set; }
 
         private void ToProperties(object source, object target)
         {
             if (source == null) return;
 
-            var sourceProps = source.GetType().GetProperties().ToDictionary(o => o.Name, o => o);
+            var sourceProps = source.GetType()
+                .GetProperties()
+                .ToDictionary(o => o.Name, o => o);
             var targetProps = target.GetType().GetProperties();
             foreach (var targetProp in targetProps)
             {
-                System.Reflection.PropertyInfo sourceProp;
+                PropertyInfo sourceProp;
                 if (sourceProps.TryGetValue(targetProp.Name, out sourceProp))
                 {
                     var value = sourceProp.GetValue(source, null);
@@ -64,23 +69,17 @@ namespace WpfApplication4.ViewModels
             }
         }
 
-        public Func<UpdateEvaluationItem> TryGetRequest { get; set; }
-
         public abstract void WriteToRequestFormula();
     }
 
     public class UnsupportFormulaViewModel : FormulaViewModel
     {
-        public UnsupportFormulaViewModel() : base(null) { }
+        public UnsupportFormulaViewModel() : base(null)
+        {
+        }
 
         public override void WriteToRequestFormula()
         {
-
-        }
-
-        public override string Name
-        {
-            get { return "unknown"; }
         }
     }
 }

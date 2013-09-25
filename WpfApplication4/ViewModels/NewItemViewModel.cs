@@ -14,10 +14,7 @@ namespace WpfApplication4.ViewModels
 
         public override string Name
         {
-            get
-            {
-                return _name;
-            }
+            get { return _name; }
             set
             {
                 _name = value;
@@ -27,23 +24,19 @@ namespace WpfApplication4.ViewModels
 
         public override void OperationAdded()
         {
-            
-                PropertyChanged += (sender, e) =>
+            PropertyChanged += (sender, e) =>
+            {
+                var value = GetType().GetProperty(e.PropertyName).GetValue(this, null);
+
+                foreach (var link in Operations.Where(o => !string.IsNullOrEmpty(o.Method) && o.Method != "GET"))
                 {
-                    var value = this.GetType().GetProperty(e.PropertyName).GetValue(this, null);
-
-                    foreach (var link in Operations.Where(o => !string.IsNullOrEmpty(o.Method) && o.Method != "GET"))
+                    var propInfo = link.Request.GetType().GetProperty(e.PropertyName);
+                    if (propInfo != null)
                     {
-                        var propInfo = link.Request.GetType().GetProperty(e.PropertyName);
-                        if (propInfo != null)
-                        {
-                            propInfo.SetValue(link.Request, value, null);
-                        }
-                    } 
-                };
-            
-
-
+                        propInfo.SetValue(link.Request, value, null);
+                    }
+                }
+            };
         }
     }
 }

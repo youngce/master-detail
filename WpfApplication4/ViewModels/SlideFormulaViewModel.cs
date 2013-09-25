@@ -1,4 +1,3 @@
-using System;
 using Grandsys.Wfm.Services.Outsource.ServiceModel;
 
 namespace WpfApplication4.ViewModels
@@ -6,8 +5,8 @@ namespace WpfApplication4.ViewModels
     public class SlideFormulaViewModel : FormulaViewModel
     {
         private double _finalIndicator;
-        private double _stepScore;
         private double _startIndicator;
+        private double _stepScore;
 
         public SlideFormulaViewModel(object model)
             : base(model)
@@ -16,44 +15,42 @@ namespace WpfApplication4.ViewModels
 
         public double StepScore
         {
-            get { return this._stepScore; }
+            get { return _stepScore; }
             set
             {
-                this._stepScore = value;
+                _stepScore = value;
                 WriteToRequestFormula();
             }
         }
 
         public double StartIndicator
         {
-            get { return this._startIndicator; }
+            get { return _startIndicator; }
             set
             {
-                this._startIndicator = value;
+                _startIndicator = value;
                 WriteToRequestFormula();
             }
         }
 
         public double FinalIndicator
         {
-            get { return this._finalIndicator; }
+            get { return _finalIndicator; }
             set
             {
-                this._finalIndicator = value;
+                _finalIndicator = value;
                 WriteToRequestFormula();
             }
         }
-
-        public override string Name { get { return "Slide"; } }
 
         public override void WriteToRequestFormula()
         {
             if (TryGetRequest == null) return;
 
-            var request = TryGetRequest();
+            UpdateEvaluationItem request = TryGetRequest();
             if (request != null)
             {
-                request.Formula = new FormulaInfo()
+                request.Formula = new FormulaInfo
                 {
                     Type = Name,
                     BaseIndicator = BaseIndicator,
