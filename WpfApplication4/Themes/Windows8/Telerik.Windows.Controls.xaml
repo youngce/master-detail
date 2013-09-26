@@ -839,11 +839,11 @@
                 </Grid>
               </Grid>
               <telerikPrimitives:LayoutTransformControl RenderTransformOrigin=".5 .5" x:Name="HeaderContentTransform" Grid.Column="0" Grid.Row="0">
-                <ContentPresenter Grid.Column="1" Margin="5 0" x:Name="HeaderContent" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Content="{TemplateBinding Header}" UseLayoutRounding="True" ContentTemplate="{TemplateBinding HeaderTemplate}" />
+                <ContentPresenter Grid.Column="1" Margin="5 0" x:Name="HeaderContent" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Content="{TemplateBinding Header}" ContentTemplate="{TemplateBinding HeaderTemplate}" />
               </telerikPrimitives:LayoutTransformControl>
             </Grid>
           </telerik:RadToggleButton>
-          <ContentPresenter x:Name="Content" Margin="{TemplateBinding Padding}" Visibility="Collapsed" Content="{TemplateBinding Content}" ContentTemplate="{TemplateBinding ContentTemplate}" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" UseLayoutRounding="True" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
+          <ContentPresenter x:Name="Content" Margin="{TemplateBinding Padding}" Visibility="Collapsed" Content="{TemplateBinding Content}" ContentTemplate="{TemplateBinding ContentTemplate}" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
         </Grid>
       </Border>
     </Grid>
@@ -856,7 +856,6 @@
     <Setter Property="IsTabStop" Value="false" />
     <Setter Property="HorizontalContentAlignment" Value="Stretch" />
     <Setter Property="VerticalContentAlignment" Value="Stretch" />
-    <Setter Property="UseLayoutRounding" Value="True" />
     <Setter Property="Padding" Value="2" />
     <Setter Property="FocusVisualStyle" Value="{x:Null}" />
     <Setter Property="animation:AnimationManager.AnimationSelector">

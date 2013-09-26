@@ -3884,7 +3884,7 @@
     <Setter Property="VerticalContentAlignment" Value="Center" />
     <Setter Property="HorizontalAlignment" Value="Left" />
     <Setter Property="Padding" Value="5 0" />
-    <Setter Property="IsTabStop" Value="True" />
+    <Setter Property="IsTabStop" Value="False" />
     <Setter Property="IsReadOnly" Value="False" />
     <Setter Property="TextMode" Value="MaskedText" />
     <Setter Property="ErrorMessageTemplate">
@@ -4008,12 +4008,12 @@
                   <ColumnDefinition Width="*" />
                   <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
-                <maskedInput:PreviewInputTextBox x:Name="EditorSite" TabIndex="{TemplateBinding TabIndex}" Cursor="{TemplateBinding Cursor}" IsTabStop="{TemplateBinding IsTabStop}" AcceptsReturn="{TemplateBinding AcceptsReturn}" IsEnabled="{TemplateBinding IsEnabled}" Foreground="{TemplateBinding Foreground}" IsReadOnly="{TemplateBinding IsReadOnly}" Padding="{TemplateBinding Padding}" Height="{TemplateBinding Height}" TextAlignment="{Binding HorizontalContentAlignment, Converter={StaticResource conv}, RelativeSource={RelativeSource Mode=TemplatedParent}}" VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}" HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}" Style="{TemplateBinding TextBoxStyle}" FontFamily="{TemplateBinding FontFamily}" FontSize="{TemplateBinding FontSize}" FontWeight="{TemplateBinding FontWeight}" />
+                <maskedInput:PreviewInputTextBox x:Name="EditorSite" TabIndex="{TemplateBinding TabIndex}" Cursor="{TemplateBinding Cursor}" IsTabStop="True" AcceptsReturn="{TemplateBinding AcceptsReturn}" IsEnabled="{TemplateBinding IsEnabled}" Foreground="{TemplateBinding Foreground}" IsReadOnly="{TemplateBinding IsReadOnly}" Padding="{TemplateBinding Padding}" Height="{TemplateBinding Height}" TextAlignment="{Binding HorizontalContentAlignment, Converter={StaticResource conv}, RelativeSource={RelativeSource Mode=TemplatedParent}}" VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}" HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}" Style="{TemplateBinding TextBoxStyle}" FontFamily="{TemplateBinding FontFamily}" FontSize="{TemplateBinding FontSize}" FontWeight="{TemplateBinding FontWeight}" />
                 <Border IsHitTestVisible="False" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="0" x:Name="DisplayTextContent" Visibility="Collapsed">
                   <maskedInput:PreviewInputTextBox x:Name="DisplayText" Cursor="{TemplateBinding Cursor}" Text="{Binding Path=Text, RelativeSource={RelativeSource Mode=TemplatedParent}, Mode=OneWay}" IsTabStop="False" Padding="{TemplateBinding Padding}" IsEnabled="{TemplateBinding IsEnabled}" Foreground="{TemplateBinding Foreground}" IsReadOnly="{TemplateBinding IsReadOnly}" Style="{TemplateBinding TextBoxStyle}" Height="{TemplateBinding Height}" TextAlignment="{Binding HorizontalContentAlignment, Converter={StaticResource conv}, RelativeSource={RelativeSource Mode=TemplatedParent}}" VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}" HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}" FontFamily="{TemplateBinding FontFamily}" FontSize="{TemplateBinding FontSize}" FontWeight="{TemplateBinding FontWeight}" />
                 </Border>
                 <Border IsHitTestVisible="False" x:Name="EmptyContent" Visibility="Collapsed" Padding="5,0,0,0">
-                  <ContentControl x:Name="Content" IsTabStop="False" Content="{TemplateBinding EmptyContent}" ContentTemplate="{TemplateBinding EmptyContentTemplate}" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" Foreground="{TemplateBinding Foreground}" Margin="{TemplateBinding Padding}" FontStyle="Italic" />
+                  <ContentControl x:Name="Content" Content="{TemplateBinding EmptyContent}" ContentTemplate="{TemplateBinding EmptyContentTemplate}" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" Foreground="{TemplateBinding Foreground}" Margin="{TemplateBinding Padding}" FontStyle="Italic" />
                 </Border>
                 <telerik:RadButton x:Name="ClearButton" IsEnabled="{TemplateBinding IsEnabled}" Command="{TemplateBinding ClearCommand}" IsTabStop="False" Style="{TemplateBinding ClearButtonStyle}" Opacity="0" Grid.Column="1" Visibility="{Binding Path=IsClearButtonVisible, RelativeSource={RelativeSource Mode=TemplatedParent}, Converter={StaticResource boolToVisConverter}}"></telerik:RadButton>
               </Grid>

@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Threading;
+using Grandsys.Wfm.Services.Outsource.ServiceModel;
 using ServiceStack.ServiceClient.Web;
 using ServiceStack.ServiceHost;
 using Telerik.Windows.Controls;
@@ -15,6 +16,7 @@ using System.Reactive.Linq;
 using System.Reactive.Concurrency;
 using ReactiveUI.Xaml;
 using System.Reactive;
+using GetEvaluationItem = WpfApplication4.Model.GetEvaluationItem;
 
 namespace WpfApplication4.ViewModels
 {
@@ -33,6 +35,7 @@ namespace WpfApplication4.ViewModels
 
         public MasterViewModel()
         {
+            //new Item's ViewModel
             var source = new BehaviorSubject<ItemViewModel>(new UndefinedViewModel());
             source.ToProperty(this, x => x.CurrentViewModel);
 
@@ -40,12 +43,23 @@ namespace WpfApplication4.ViewModels
             GetAll = new ReactiveAsyncCommand();
             New = new ReactiveAsyncCommand();
 
+
             var selectedItemChanged = this.WhenAny(x => x.SelectedItem, x => x.Value);
 
-            var getEvaluationItem = selectedItemChanged.ObserveOn(Scheduler.Default)
-                                        .Where(x => x != null && x.Id != CurrentViewModel.Id)
-                                        .Select(o => _client.Get(new GetEvaluationItem(o.Id)));
 
+            
+            var getEvaluationItem = selectedItemChanged.ObserveOn(Scheduler.Default)
+                                        .Where(x =>
+                                               {
+                                                   return x != null && x.Id != CurrentViewModel.Id;
+                                               })
+                                        .Select(o =>
+                                                {
+                                                    var getItem = _client.Get(new GetEvaluationItem(o.Id));
+
+                                                    return getItem;
+                                                });
+            //get Discard or Edit Command
             var howToNew = New.RegisterAsyncFunction(_ =>
             {
                 var response = _client.Get(new Grandsys.Wfm.Services.Outsource.ServiceModel.EvaluationItemsCreationWays());
@@ -55,9 +69,11 @@ namespace WpfApplication4.ViewModels
                 return new ResponseEvaluationItem() { Links = links };
             });
 
+            //Get EvaluationItems
             GetAll.RegisterAsyncFunction(_ =>
             {
-                return _client.Get(new EvaluationItems()).ToObservable().CreateCollection();
+                var items = _client.Get(new EvaluationItems()).ToObservable().CreateCollection();
+                return items;
             }).ToProperty(this, x => x.Items);
 
             this.WhenAny(x => x.Items, x => x.Value).Where(o => o != null).Throttle(TimeSpan.FromMilliseconds(200)).Subscribe(o =>
@@ -77,6 +93,7 @@ namespace WpfApplication4.ViewModels
 
                 var vm = ItemViewModel.Create(o);
 
+               
                 foreach (var link in o.Links)
                 {
                     var cmd = new HyperCommand(_client, link);
