@@ -1,13 +1,13 @@
-using System;
 using Grandsys.Wfm.Services.Outsource.ServiceModel;
+using ReactiveUI;
 
 namespace WpfApplication4.ViewModels
 {
     public class SlideFormulaViewModel : FormulaViewModel
     {
-        private double _finalIndicator;
-        private double _stepScore;
-        private double _startIndicator;
+        private double _FinalIndicator;
+        private double _StartIndicator;
+        private double _StepScore;
 
         public SlideFormulaViewModel(object model)
             : base(model)
@@ -16,54 +16,34 @@ namespace WpfApplication4.ViewModels
 
         public double StepScore
         {
-            get { return this._stepScore; }
-            set
-            {
-                this._stepScore = value;
-                WriteToRequestFormula();
-            }
+            get { return _StepScore; }
+            set { this.RaiseAndSetIfChanged(x => x.StepScore, value); }
         }
 
         public double StartIndicator
         {
-            get { return this._startIndicator; }
-            set
-            {
-                this._startIndicator = value;
-                WriteToRequestFormula();
-            }
+            get { return _StartIndicator; }
+            set { this.RaiseAndSetIfChanged(x => x.StartIndicator, value); }
         }
 
         public double FinalIndicator
         {
-            get { return this._finalIndicator; }
-            set
-            {
-                this._finalIndicator = value;
-                WriteToRequestFormula();
-            }
+            get { return _FinalIndicator; }
+            set { this.RaiseAndSetIfChanged(x => x.FinalIndicator, value); }
         }
 
-        public override string Name { get { return "Slide"; } }
-
-        public override void WriteToRequestFormula()
+        public override FormulaInfo ToValue()
         {
-            if (TryGetRequest == null) return;
-
-            var request = TryGetRequest();
-            if (request != null)
+            return new FormulaInfo
             {
-                request.Formula = new FormulaInfo()
-                {
-                    Type = Name,
-                    BaseIndicator = BaseIndicator,
-                    BaseScore = BaseScore,
-                    Scale = Scale,
-                    StepScore = StepScore,
-                    StartIndicator = StartIndicator,
-                    FinalIndicator = FinalIndicator
-                };
-            }
+                Type = Name,
+                BaseIndicator = BaseIndicator,
+                BaseScore = BaseScore,
+                Scale = Scale,
+                StepScore = StepScore,
+                StartIndicator = StartIndicator,
+                FinalIndicator = FinalIndicator
+            };
         }
     }
 }

@@ -4,7 +4,6 @@ using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Threading;
-using Grandsys.Wfm.Services.Outsource.ServiceModel;
 using ServiceStack.ServiceClient.Web;
 using ServiceStack.ServiceHost;
 using Telerik.Windows.Controls;
@@ -16,7 +15,6 @@ using System.Reactive.Linq;
 using System.Reactive.Concurrency;
 using ReactiveUI.Xaml;
 using System.Reactive;
-using GetEvaluationItem = WpfApplication4.Model.GetEvaluationItem;
 
 namespace WpfApplication4.ViewModels
 {
@@ -29,51 +27,39 @@ namespace WpfApplication4.ViewModels
     {
 
         private JsonServiceClient _client;
-        private ReactiveUI.ObservableAsPropertyHelper<ItemViewModel> _CurrentViewModel;
+        private ObservableAsPropertyHelper<ItemViewModel> _CurrentViewModel;
 
         public ItemViewModel CurrentViewModel { get { return _CurrentViewModel.Value; } }
 
         public MasterViewModel()
         {
-            //new Item's ViewModel
-            var source = new BehaviorSubject<ItemViewModel>(new UndefinedViewModel());
-            source.ToProperty(this, x => x.CurrentViewModel);
+            var viewModelSource = new BehaviorSubject<ItemViewModel>(new UndefinedViewModel());
+            viewModelSource.ToProperty(this, x => x.CurrentViewModel);
 
-            _client = new JsonServiceClient("http://192.168.40.38:1678");
+            _client = new JsonServiceClient("http://localhost:1678/");
             GetAll = new ReactiveAsyncCommand();
             New = new ReactiveAsyncCommand();
 
-
             var selectedItemChanged = this.WhenAny(x => x.SelectedItem, x => x.Value);
 
+            var getEvaluationItem = selectedItemChanged.Throttle(TimeSpan.FromMilliseconds(300)).ObserveOn(Scheduler.Default)
+                                        .Where(x => x != null && x.Id != CurrentViewModel.Id)
+                                        .Select(o => _client.Get(new GetEvaluationItem(o.Id)));
 
-            
-            var getEvaluationItem = selectedItemChanged.ObserveOn(Scheduler.Default)
-                                        .Where(x =>
-                                               {
-                                                   return x != null && x.Id != CurrentViewModel.Id;
-                                               })
-                                        .Select(o =>
-                                                {
-                                                    var getItem = _client.Get(new GetEvaluationItem(o.Id));
-
-                                                    return getItem;
-                                                });
-            //get Discard or Edit Command
             var howToNew = New.RegisterAsyncFunction(_ =>
             {
                 var response = _client.Get(new Grandsys.Wfm.Services.Outsource.ServiceModel.EvaluationItemsCreationWays());
-                var links = new List<Grandsys.Wfm.Services.Outsource.ServiceModel.Link>(response.Links);
+                var links = new List<Grandsys.Wfm.Services.Outsource.ServiceModel.Link>(response.Links)
+                {
+                    new Grandsys.Wfm.Services.Outsource.ServiceModel.Link() {Name = "Discard"}
+                };
 
-                links.Add(new Grandsys.Wfm.Services.Outsource.ServiceModel.Link() { Name = "Discard" });
                 return new ResponseEvaluationItem() { Links = links };
             });
 
-            //Get EvaluationItems
             GetAll.RegisterAsyncFunction(_ =>
             {
-                var items = _client.Get(new EvaluationItems()).ToObservable().CreateCollection();
-                return items;
+                return _client.Get(new EvaluationItems()).ToObservable().CreateCollection();
             }).ToProperty(this, x => x.Items);
 
             this.WhenAny(x => x.Items, x => x.Value).Where(o => o != null).Throttle(TimeSpan.FromMilliseconds(200)).Subscribe(o =>
@@ -87,13 +73,12 @@ namespace WpfApplication4.ViewModels
             {
                 if (o == null)
                 {
-                    source.OnNext(new UndefinedViewModel());
+                    viewModelSource.OnNext(new UndefinedViewModel());
                     return;
                 }
 
                 var vm = ItemViewModel.Create(o);
 
-               
                 foreach (var link in o.Links)
                 {
                     var cmd = new HyperCommand(_client, link);
@@ -109,7 +94,7 @@ namespace WpfApplication4.ViewModels
                 }
 
                 vm.OperationAdded();
-                source.OnNext(vm);
+                viewModelSource.OnNext(vm);
             });
 
             howToNew.Subscribe(obsvr);

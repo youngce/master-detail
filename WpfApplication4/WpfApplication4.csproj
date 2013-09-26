@@ -138,6 +138,7 @@
     <Compile Include="ViewModels\LinearFormulaViewModel.cs" />
     <Compile Include="ViewModels\MasterViewModel.cs" />
     <Compile Include="Model\ResponseEvaluationItem.cs" />
+    <Compile Include="ViewModels\NewItemViewModel.cs" />
     <Compile Include="ViewModels\SlideFormulaViewModel.cs" />
     <Compile Include="ViewModels\UndefinedViewModel.cs" />
     <Page Include="MainWindow.xaml">

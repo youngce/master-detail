@@ -1,11 +1,12 @@
 using Grandsys.Wfm.Services.Outsource.ServiceModel;
+using ReactiveUI;
 
 namespace WpfApplication4.ViewModels
 {
     public class LinearFormulaViewModel : FormulaViewModel
     {
-        private double _increaseStepScore;
-        private double _decreaseStepScore;
+        private double _DecreaseStepScore;
+        private double _IncreaseStepScore;
 
         public LinearFormulaViewModel(object model)
             : base(model)
@@ -14,42 +15,27 @@ namespace WpfApplication4.ViewModels
 
         public double IncreaseStepScore
         {
-            get { return this._increaseStepScore; }
-            set
-            {
-                this._increaseStepScore = value;
-                WriteToRequestFormula();
-            }
+            get { return _IncreaseStepScore; }
+            set { this.RaiseAndSetIfChanged(x => x.IncreaseStepScore, value); }
         }
 
         public double DecreaseStepScore
         {
-            get { return this._decreaseStepScore; }
-            set
-            {
-                this._decreaseStepScore = value;
-                WriteToRequestFormula();
-            }
+            get { return _DecreaseStepScore; }
+            set { this.RaiseAndSetIfChanged(x => x.DecreaseStepScore, value); }
         }
 
-        public override string Name { get { return "Linear"; } }
-
-        public override void WriteToRequestFormula()
+        public override FormulaInfo ToValue()
         {
-            if (TryGetRequest == null) return;
-            var request = TryGetRequest();
-            if (request != null)
+            return new FormulaInfo
             {
-                request.Formula = new FormulaInfo()
-                {
-                    Type = Name,
-                    BaseIndicator = BaseIndicator,
-                    BaseScore = BaseScore,
-                    Scale = Scale,
-                    IncreaseStepScore = IncreaseStepScore,
-                    DecreaseStepScore = DecreaseStepScore
-                };
-            }
+                Type = Name,
+                BaseIndicator = BaseIndicator,
+                BaseScore = BaseScore,
+                Scale = Scale,
+                IncreaseStepScore = IncreaseStepScore,
+                DecreaseStepScore = DecreaseStepScore
+            };
         }
     }
 }

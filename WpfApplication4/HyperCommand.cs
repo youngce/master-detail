@@ -19,14 +19,14 @@ namespace WpfApplication4
             Request = link.Request;
             Response = Command.RegisterAsyncFunction(_ => {
 
-                Model.ResponseEvaluationItem response = null;
+                Model.ResponseEvaluationItem response;
                 if (string.IsNullOrEmpty(Method))
-                    return response;
+                    return null;
 
                 switch (Method)
                 {
                     default:
-                        response = client.Send<Model.ResponseEvaluationItem>(Method, Request.ToUrl(Method), Request);
+                        response = client.Send<Model.ResponseEvaluationItem>(Method, Request.ToUrl(Method), _ ?? Request);
                         break;
                     case "GET":
                         response = client.Get<Model.ResponseEvaluationItem>(Request.ToUrl(Method));
@@ -34,9 +34,7 @@ namespace WpfApplication4
                 }
                 return response;
             });
-            Command.ThrownExceptions.Subscribe(ex => {
-                Console.WriteLine(ex.Message);
-            });
+            Command.ThrownExceptions.Subscribe(ex => Console.WriteLine(ex.Message));
         }
 
         public IObservable<Model.ResponseEvaluationItem> Response { get; private set; }
