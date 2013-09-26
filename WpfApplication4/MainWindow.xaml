@@ -12,7 +12,7 @@
         <DockPanel LastChildFill="True">
             <StackPanel Orientation="Horizontal" DockPanel.Dock="Bottom" Margin="10 0 10 10">
                 <Button Content="Refresh" Command="{Binding GetAll}" />
-                <Button Content="New" Command="{Binding New}" />
+                <Button Content="New" Command="{Binding New}"/>
             </StackPanel>
 
             <ListBox x:Name="ItemsListBox" ItemsSource="{Binding Items}" Margin="10"
@@ -58,7 +58,6 @@
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate DataType="{x:Type wpfApplication4:HyperCommand}">
                                     <Button Content="{Binding Content}" Command="{Binding Command}"
-                                            CommandParameter="{Binding Path=DataContext, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
                                             Margin="5 5 0 0" />
                                 </DataTemplate>
                             </ItemsControl.ItemTemplate>
@@ -82,7 +81,7 @@
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate DataType="{x:Type wpfApplication4:HyperCommand}">
                                     <Button Content="{Binding Content}" Command="{Binding Command}"
-                                            CommandParameter="{Binding Path=DataContext, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
+                                            CommandParameter="{Binding Path=DataContext.UpdateValues, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
                                             Margin="5 5 0 0" />
                                 </DataTemplate>
                             </ItemsControl.ItemTemplate>
@@ -130,7 +129,6 @@
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate DataType="{x:Type wpfApplication4:HyperCommand}">
                                     <Button Content="{Binding Content}" Command="{Binding Command}"
-                                            CommandParameter="{Binding Path=DataContext, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
                                             Margin="5 5 0 0" />
                                 </DataTemplate>
                             </ItemsControl.ItemTemplate>

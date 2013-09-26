@@ -1,20 +1,21 @@
 ﻿using System.Collections.ObjectModel;
 using System.Linq;
+using ReactiveUI;
 using Telerik.Windows.Controls;
 using WpfApplication4.Model;
 
 namespace WpfApplication4.ViewModels
 {
-    public class ItemViewModel : ViewModelBase
+    public class ItemViewModel : ReactiveObject
     {
-        private bool _isEditing;
+        private bool _IsEditing;
 
         public ItemViewModel()
         {
             Operations = new ObservableCollection<HyperCommand>();
         }
 
-        public string Id { get; set; }
+        public string Id { get; protected set; }
 
         public virtual string Name { get; set; }
 
@@ -23,11 +24,10 @@ namespace WpfApplication4.ViewModels
 
         public bool IsEditing
         {
-            get { return _isEditing; }
+            get { return _IsEditing; }
             set
             {
-                _isEditing = value;
-                OnPropertyChanged(() => IsEditing);
+                this.RaiseAndSetIfChanged(x => x.IsEditing, value);
             }
         }
 
@@ -38,10 +38,10 @@ namespace WpfApplication4.ViewModels
             if (model == null)
                 return new UndefinedViewModel();
             if (string.IsNullOrEmpty(model.Id))
-                return new NewItemViewModel {Name = "unnamed"};
+                return new NewItemViewModel { Name = "unnamed" };
             if (model.Status == "deleted")
             {
-                return new DeletedViewModel {Id = model.Id, Name = model.Name, StatisticalWay = model.StatisticalWay};
+                return new DeletedViewModel { Id = model.Id, Name = model.Name, StatisticalWay = model.StatisticalWay };
             }
 
             if (model.Links != null && model.Links.Any(o => o.Method == "PATCH"))

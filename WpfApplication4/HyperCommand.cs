@@ -26,7 +26,7 @@ namespace WpfApplication4
                 switch (Method)
                 {
                     default:
-                        response = client.Send<Model.ResponseEvaluationItem>(Method, Request.ToUrl(Method), Request);
+                        response = client.Send<Model.ResponseEvaluationItem>(Method, Request.ToUrl(Method), _ ?? Request);
                         break;
                     case "GET":
                         response = client.Get<Model.ResponseEvaluationItem>(Request.ToUrl(Method));

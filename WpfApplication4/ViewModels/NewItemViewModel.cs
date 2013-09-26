@@ -1,11 +1,12 @@
 using System;
 using System.Linq;
+using ReactiveUI;
 
 namespace WpfApplication4.ViewModels
 {
     public class NewItemViewModel : ItemViewModel
     {
-        private string _name;
+        private string _Name;
 
         public NewItemViewModel()
         {
@@ -14,29 +15,12 @@ namespace WpfApplication4.ViewModels
 
         public override string Name
         {
-            get { return _name; }
+            get { return _Name; }
             set
             {
-                _name = value;
-                OnPropertyChanged(() => Name);
+                _Name = value;
+                this.RaiseAndSetIfChanged(x => x.Name, value);
             }
-        }
-
-        public override void OperationAdded()
-        {
-            PropertyChanged += (sender, e) =>
-            {
-                var value = GetType().GetProperty(e.PropertyName).GetValue(this, null);
-
-                foreach (var link in Operations.Where(o => !string.IsNullOrEmpty(o.Method) && o.Method != "GET"))
-                {
-                    var propInfo = link.Request.GetType().GetProperty(e.PropertyName);
-                    if (propInfo != null)
-                    {
-                        propInfo.SetValue(link.Request, value, null);
-                    }
-                }
-            };
         }
     }
 }

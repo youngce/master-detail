@@ -33,16 +33,16 @@ namespace WpfApplication4.ViewModels
 
         public MasterViewModel()
         {
-            var source = new BehaviorSubject<ItemViewModel>(new UndefinedViewModel());
-            source.ToProperty(this, x => x.CurrentViewModel);
+            var viewModelSource = new BehaviorSubject<ItemViewModel>(new UndefinedViewModel());
+            viewModelSource.ToProperty(this, x => x.CurrentViewModel);
 
-            _client = new JsonServiceClient("http://localhost:35138/");
+            _client = new JsonServiceClient("http://localhost:1678/");
             GetAll = new ReactiveAsyncCommand();
             New = new ReactiveAsyncCommand();
 
             var selectedItemChanged = this.WhenAny(x => x.SelectedItem, x => x.Value);
 
-            var getEvaluationItem = selectedItemChanged.ObserveOn(Scheduler.Default)
+            var getEvaluationItem = selectedItemChanged.Throttle(TimeSpan.FromMilliseconds(300)).ObserveOn(Scheduler.Default)
                                         .Where(x => x != null && x.Id != CurrentViewModel.Id)
                                         .Select(o => _client.Get(new GetEvaluationItem(o.Id)));
 
@@ -73,7 +73,7 @@ namespace WpfApplication4.ViewModels
             {
                 if (o == null)
                 {
-                    source.OnNext(new UndefinedViewModel());
+                    viewModelSource.OnNext(new UndefinedViewModel());
                     return;
                 }
 
@@ -94,7 +94,7 @@ namespace WpfApplication4.ViewModels
                 }
 
                 vm.OperationAdded();
-                source.OnNext(vm);
+                viewModelSource.OnNext(vm);
             });
 
             howToNew.Subscribe(obsvr);
